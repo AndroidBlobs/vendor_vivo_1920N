@@ -1,0 +1,27 @@
+{
+  "config":{
+    "hw_platform": ["QRD"],
+    "soc_id": ["394"]
+  },
+  "mmc3630kj_0":{
+    "owner": "sns_mmc3630kj",
+    ".mag":{
+      "owner": "sns_mmc3630kj",
+      ".config":{
+        "owner": "sns_mmc3630kj",
+        "is_dri":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "hw_id":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "res_idx":{ "type": "int", "ver": "0",
+          "data": "0"
+        },
+        "sync_stream":{ "type": "int", "ver": "0",
+          "data": "0"
+        }
+      }
+    }
+  }
+}

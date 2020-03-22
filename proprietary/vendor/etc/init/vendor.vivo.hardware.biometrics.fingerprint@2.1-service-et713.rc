@@ -1,0 +1,33 @@
+on property:vendor.fingerprint.boot=udfp_egis_et713
+    chown system system /dev/esfp0
+    chmod 0644 /dev/esfp0
+    setprop persist.vivo.fingerprint.front true
+    enable biometrics-fingerprint-et713
+
+on post-fs-data && property:vendor.fingerprint.boot=udfp_egis_et713
+    mkdir /data/vendor/fingerprint/et713 0771 system system
+    mkdir /mnt/vendor/persist/fingerprint 0777 system system
+    chown system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+    chmod 0777 system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+
+on property:vendor.fingerprint.boot=udfp_egis_et713 && property:vendor.fingerprint.calibrate=success
+    chown system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+    chmod 0777 /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+
+# Notified from et713-restart-counter-sh
+#on property:sys.fingerprint.stop=biometrics-fingerprint-et713
+#    stop biometrics-fingerprint-et713
+
+service biometrics-fingerprint-et713 /vendor/bin/hw/vendor.vivo.hardware.biometrics.fingerprint@2.1-service-et713
+    class late_start
+    user system
+    group system input
+    onrestart restart et713-restart-counter-sh
+    disabled
+ 
+service et713-restart-counter-sh /system/vendor/bin/sh /vendor/bin/init.vivo.fingerprint_restart_counter.sh biometrics-fingerprint-et713 5
+   user system
+   group system
+   disabled
+   oneshot
+

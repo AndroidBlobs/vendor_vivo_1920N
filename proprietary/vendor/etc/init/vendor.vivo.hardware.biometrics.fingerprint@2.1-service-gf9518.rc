@@ -1,0 +1,48 @@
+on property:vendor.fingerprint.boot=udfp_goodix_gf9518
+    chown system system /dev/goodix_fp
+    chmod 0644 /dev/goodix_fp
+    setprop persist.vivo.fingerprint.front true
+    enable biometrics-fingerprint-gf9518
+
+on post-fs-data && property:vendor.fingerprint.boot=udfp_goodix_gf9518
+    mkdir /data/vendor/fingerprint/gf9518 0771 system system
+    mkdir /mnt/vendor/persist/fingerprint 0777 system system
+    chown system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+    chmod 0777 /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+
+on property:vendor.fingerprint.boot=udfp_goodix2_gf9518
+    chown system system /dev/goodix_fp
+    chmod 0644 /dev/goodix_fp
+    setprop persist.vivo.fingerprint.front true
+    enable biometrics-fingerprint-gf9518
+
+on property:vendor.fingerprint.boot=udfp_goodix_gf9518 && property:vendor.fingerprint.calibrate=success
+    chown system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+    chmod 0777 /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+
+on post-fs-data && property:vendor.fingerprint.boot=udfp_goodix2_gf9518
+    mkdir /data/vendor/fingerprint/gf9518 0771 system system
+    mkdir /mnt/vendor/persist/fingerprint 0777 system system
+    chown system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+    chmod 0777 /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+
+on property:vendor.fingerprint.boot=udfp_goodix2_gf9518 && property:vendor.fingerprint.calibrate=success
+    chown system system /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+    chmod 0777 /mnt/vendor/persist/fingerprint/base_cali_spmt1_backup.so
+
+# Notified from gf9518-restart-counter-sh
+#on property:sys.fingerprint.stop=biometrics-fingerprint-gf9518
+#    stop biometrics-fingerprint-gf9518
+
+service biometrics-fingerprint-gf9518 /vendor/bin/hw/vendor.vivo.hardware.biometrics.fingerprint@2.1-service-gf9518
+    class late_start
+    user system
+    group system input
+    onrestart restart gf9518-restart-counter-sh
+    disabled
+
+service gf9518-restart-counter-sh /system/vendor/bin/sh /vendor/bin/init.vivo.fingerprint_restart_counter.sh biometrics-fingerprint-gf9518 5
+    user system
+    group system
+    disabled
+    oneshot
